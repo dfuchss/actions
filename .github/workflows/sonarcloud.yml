@@ -1,0 +1,37 @@
+name: SonarCloud for Maven Projects
+
+on:
+  workflow_call:
+    inputs:
+        with-submodules:
+          description: "Clone repository with its submodules"
+          type: boolean
+          required: false
+          default: false
+    secrets:
+      SONAR_TOKEN:
+        required: true
+          
+jobs:
+  build:
+    name: "SonarCloud Scan"
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }} 
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: 17
+        cache: 'maven'
+                
+    - name: Build and Analyze
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --file pom.xml
