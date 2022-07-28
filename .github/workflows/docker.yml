@@ -1,0 +1,74 @@
+name: Build and Deploy Docker Images
+
+on:
+  workflow_call:
+    inputs:
+        with-submodules:
+          description: "Clone repository with its submodules"
+          type: boolean
+          required: false
+          default: false
+        image-name:
+          description: "The name of the docker image without tag and registry"
+          type: string
+          required: true
+        push:
+          description: "Flag to push the image to registry"
+          type: boolean
+          required: false
+          default: false
+          
+jobs:
+  pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          concurrent_skipping: 'same_content_newer'
+          skip_after_successful_duplicate: 'true'
+          
+  build:
+    needs: pre_job
+    name: "Docker Build and/or Deploy"
+    runs-on: ubuntu-latest
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' && github.actor != 'dependabot[bot]' }}
+    
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file Dockerfile --tag ${{ inputs.image-name }}
+
+      - name: Log into Registry
+        if: ${{ inputs.push }}
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+
+      - name: Push Image
+        if: ${{ inputs.push }}
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/${{ inputs.image-name }}
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "main" ] && VERSION=latest
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag ${{ inputs.image-name }} $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
