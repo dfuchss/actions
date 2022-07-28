@@ -101,6 +101,6 @@ jobs:
   publish:
     uses: dfuchss/actions/.github/workflows/docker.yml@main
     with:
-	  image-name: "myimage"
+      image-name: "myimage"
       push: true
 ```
