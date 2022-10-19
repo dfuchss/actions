@@ -53,7 +53,7 @@ jobs:
       run: mvn -U -B verify
 
     - name: Set maven settings.xml
-      uses: whelk-io/maven-settings-xml-action@v20
+      uses: whelk-io/maven-settings-xml-action@v21
       if: ${{ inputs.deploy }}
       with:
         servers: '[{ "id": "ossrh", "username": "${{ secrets.OSSRH_USER }}", "password": "${{ secrets.OSSRH_TOKEN }}" }]'
