@@ -59,6 +59,27 @@ jobs:
       GPG_KEY: ${{secrets.GPG_KEY}}
 ```
 
+## maven-update.yml
+Update Dependencies and Update Versions
+
+```yml
+name: Maven Dependency Updates
+
+on:
+  schedule:
+    - cron: "00 11 * * 2"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  update:
+    uses: dfuchss/actions/.github/workflows/maven-update.yml@main
+    secrets:
+      # Needs to be a personal access token to push as a certain user; otherwise actions won't be triggered.
+      PAT: ${{ secrets.PAT }}
+```
+
 ## sonarcloud.yml
 Verify a maven project via sonarcloud
 
