@@ -1,0 +1,69 @@
+name: Update Dependencies and Update Versions
+
+on:
+  workflow_call:
+    inputs:
+        with-submodules:
+          description: "Clone repository with its submodules"
+          type: boolean
+          required: false
+          default: false
+          
+jobs:
+  pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          concurrent_skipping: 'same_content_newer'
+          skip_after_successful_duplicate: 'true'
+          
+  build:
+    needs: pre_job
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    name: "Check for Updates"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: ${{ inputs.with-submodules }}
+
+    - uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: 'temurin'
+        cache: 'maven'
+
+    - name: Update Dependencies
+      shell: bash
+      run: mvn -U -B versions:update-parent versions:update-properties versions:update-parent versions:update-child-modules
+
+    - name: Check if there are changes
+      id: changes
+      run: echo "changed=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
+
+    - name: Commit Changes of Versions
+      if: steps.changes.outputs.changed != 0
+      shell: bash
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git add . && git commit -m "Auto-Update Depedencies"
+
+    - name: New Release if there were Updates
+      shell: bash
+      if: steps.changes.outputs.changed != 0
+      run: |
+        mvn -B release:prepare -DpushChanges=false -Dgoals=deploy 
+        mvn -B release:clean
+        
+    - name: Push Changes
+      uses: ad-m/github-push-action@master
+      if: steps.changes.outputs.changed != 0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+        tags: true
