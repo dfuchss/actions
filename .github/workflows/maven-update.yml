@@ -45,10 +45,8 @@ jobs:
       shell: bash
       run: |
         mvn -U -B versions:update-parent versions:update-properties versions:update-parent versions:update-child-modules versions:use-latest-releases -DgenerateBackupPoms=false | tee /tmp/updates-raw.txt
-        echo 'Finished updating Depedencies'
         echo 'Auto-Update Depedencies' > /tmp/updates.txt
-        echo 'Grab information from mvn versions plugin ..'
-        cat /tmp/updates-raw.txt | grep 'Updated' | cut -d ' ' -f 2- >> /tmp/updates.txt
+        cat /tmp/updates-raw.txt | grep 'Updated' | cut -d ' ' -f 2- >> /tmp/updates.txt || true
         echo 'Setting commit message to ..'
         cat /tmp/updates.txt
 
