@@ -46,7 +46,7 @@ jobs:
       run: |
         mvn -U -B versions:update-parent versions:update-properties versions:update-parent versions:update-child-modules versions:use-latest-releases -DgenerateBackupPoms=false | tee ../updates-raw.txt
         echo "Auto-Update Depedencies" > ../updates.txt
-        cat ../updates-raw.txt | grep 'Updated' | sed 's/[^ ]* //' >> ../updates.txt       
+        cat ../updates-raw.txt | grep 'Updated' | cut -d ' ' -f 2- >> ../updates.txt       
 
     - name: Check if there are changes
       id: changes
