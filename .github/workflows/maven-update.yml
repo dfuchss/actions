@@ -44,11 +44,12 @@ jobs:
     - name: Update Dependencies
       shell: bash
       run: |
-        mvn -U -B versions:update-parent versions:update-properties versions:update-parent versions:update-child-modules versions:use-latest-releases -DgenerateBackupPoms=false | tee ../updates-raw.txt
-        echo "Auto-Update Depedencies" > ../updates.txt
-        cat ../updates-raw.txt | grep 'Updated' | cut -d ' ' -f 2- >> ../updates.txt
-        echo "Setting commit message to .."
-        cat ../updates.txt
+        mvn -U -B versions:update-parent versions:update-properties versions:update-parent versions:update-child-modules versions:use-latest-releases -DgenerateBackupPoms=false | tee /tmp/updates-raw.txt
+        echo 'Finished updating Depedencies'
+        echo 'Auto-Update Depedencies' > /tmp/updates.txt
+        cat /tmp/updates-raw.txt | grep 'Updated' | cut -d ' ' -f 2- >> /tmp/updates.txt
+        echo 'Setting commit message to ..'
+        cat /tmp/updates.txt
 
     - name: Check if there are changes
       id: changes
@@ -60,7 +61,7 @@ jobs:
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
-        git add . && git commit -F ../updates.txt
+        git add . && git commit -F /tmp/updates.txt
 
     - name: New Release if there were Updates
       shell: bash
