@@ -43,7 +43,10 @@ jobs:
 
     - name: Update Dependencies
       shell: bash
-      run: mvn -U -B versions:update-parent versions:update-properties versions:update-parent versions:update-child-modules
+      run: |
+        mvn -U -B versions:update-parent versions:update-properties versions:update-parent versions:update-child-modules versions:use-latest-releases -DgenerateBackupPoms=false | tee ../updates-raw.txt
+        echo "Auto-Update Depedencies" > ../updates.txt
+        cat ../updates-raw.txt | grep 'Updated' | sed 's/[^ ]* //' >> ../updates.txt       
 
     - name: Check if there are changes
       id: changes
@@ -55,7 +58,7 @@ jobs:
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
-        git add . && git commit -m "Auto-Update Depedencies"
+        git add . && git commit -F ../updates.txt
 
     - name: New Release if there were Updates
       shell: bash
