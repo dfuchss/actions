@@ -1,0 +1,51 @@
+name: Create new Maven Release
+
+on:
+  workflow_call:
+    inputs:
+        with-submodules:
+          description: "Clone repository with its submodules"
+          type: boolean
+          required: false
+          default: false
+
+jobs:
+  pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          concurrent_skipping: 'same_content_newer'
+          skip_after_successful_duplicate: 'true'
+          
+  release:
+    needs: pre_job
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    name: "Create new GitHub Release"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: ${{ inputs.with-submodules }}
+        fetch-depth: 0
+    - name: Create Changelog
+      shell: bash
+      run: |
+        DIFF=$(git log $(git tag --sort=-creatordate | sed '2q;d')..HEAD --oneline)
+        if [ -z "$DIFF" ]; then
+          echo "Defaulting to full log"
+          DIFF=$(git log --oneline)
+        fi
+        echo "# Commits since last release" > CHANGELOG.txt
+        echo "$DIFF" | sed 's/^/* /' | sed '/Auto-Update Dependencies/{s/Updated/\n\t* Updated/g}' >> CHANGELOG.txt
+        
+    - uses: softprops/action-gh-release@v1
+      with:
+        body_path: CHANGELOG.txt
+        generate_release_notes: true
+
+
+ 
