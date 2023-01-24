@@ -81,7 +81,7 @@ jobs:
 ```
 
 ## gitbub-release.yml
-Create a new GitHub Release (Aggregate gogs from "Maven Dependency Updates" action)
+Create a new GitHub Release (Aggregate logs from "Maven Dependency Updates" action)
 
 ```yml
 name: Create Release
