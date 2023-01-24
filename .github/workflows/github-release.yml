@@ -1,4 +1,4 @@
-name: Create new Maven Release
+name: Create new GitHub Release
 
 on:
   workflow_call:
