@@ -8,6 +8,11 @@ on:
           type: boolean
           required: false
           default: false
+        profiles:
+          description: "An additional string that will be injected to the mvn command. Should be used for profiles."
+          type: string
+          required: false
+          default: ""
         deploy:
           description: "Switch to enable or disable the deployment process"
           type: boolean
@@ -50,7 +55,7 @@ jobs:
 
     - name: Maven Verify
       shell: bash
-      run: mvn -U -B verify
+      run: mvn -U -B ${{inputs.profiles}} verify
 
     - name: Set maven settings.xml
       uses: whelk-io/maven-settings-xml-action@v21
@@ -67,4 +72,4 @@ jobs:
     - name: Publish Package
       if: ${{ inputs.deploy }}
       shell: bash
-      run: mvn -Dmaven.test.skip=true -P deployment -U -B deploy
+      run: mvn -Dmaven.test.skip=true -P deployment -U -B ${{inputs.profiles}} deploy
