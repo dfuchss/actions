@@ -43,7 +43,7 @@ jobs:
             git config --global user.email "action@github.com"
             git config --global user.name "GitHub Action"
     
-        - name: Set Release Version
+        - name: Bump to Release, Verify, Bump to Next Version, and Verify
           shell: bash
           run: |
             # Download version update script to tmp directory
