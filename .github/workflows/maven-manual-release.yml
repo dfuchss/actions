@@ -1,0 +1,87 @@
+name: Create new Maven Release
+
+on:
+  workflow_call:
+    inputs:
+        with-submodules:
+          description: "Clone repository with its submodules"
+          type: boolean
+          required: false
+          default: false
+        release-version:
+            type: string
+            description: The version for release. E.g., "1.2.3"
+            required: true
+        next-version:
+            type: string
+            description: The version after release. E.g., "2.0.0"
+            required: true  
+    secrets:
+      PAT:
+        required: true
+
+jobs:
+    build:
+        name: "Trigger new Release"
+        runs-on: ubuntu-latest
+    
+        steps:
+        - uses: actions/checkout@v3.5.2
+          with:
+            persist-credentials: false
+            submodules: ${{ inputs.with-submodules }}
+    
+        - name: Set up JDK
+          uses: actions/setup-java@v3
+          with:
+            distribution: 'temurin'
+            java-version: 17
+    
+        - name: Prepare GIT
+          shell: bash
+          run: |
+            git config --global user.email "action@github.com"
+            git config --global user.name "GitHub Action"
+    
+        - name: Set Release Version
+          shell: bash
+          run: |
+            # Download version update script to tmp directory
+            curl -s https://raw.githubusercontent.com/dfuchss/actions/main/scripts/maven-version-update.sh > /tmp/maven-version-update.sh
+            chmod +x /tmp/maven-version-update.sh
+            echo "######### Content of maven-version-update.sh #########"
+            cat /tmp/maven-version-update.sh
+            echo "######################################################"
+            echo "######### Running maven-version-update.sh ###########"
+            RELEASE_VERSION=${{ inputs.release-version }} NEXT_VERSION=${{ inputs.next-version }} bash /tmp/maven-version-update.sh  
+            echo "######################################################"
+          
+        - name: Test whether release version will build
+          run: mvn -Pproducts -U -B package
+          
+        - name: Commit & Tag release version
+          shell: bash
+          run: |
+            git add .
+            git commit --allow-empty -m "Prepare for Release ${{ github.event.inputs.release-version }}"
+            git tag "v${{ github.event.inputs.release-version }}"
+            
+        - name: Set Next Version
+          run: mvn -Pproducts -DnewVersion=${{ github.event.inputs.next-version }} tycho-versions:set-version
+          
+        - name: Test whether next version will build
+          run: mvn -Pproducts -U -B package
+          
+        - name: Commit next version
+          shell: bash
+          run: |
+            git add .
+            git commit --allow-empty -m "Bump to next version {{ github.event.inputs.next-version }}"
+            
+        - name: Push Changes
+          uses: ad-m/github-push-action@master
+          with:
+            # See https://github.com/orgs/community/discussions/25702 and https://github.com/orgs/community/discussions/26220
+            github_token: ${{ secrets.PAT_TOKEN }}
+            branch: ${{ github.ref }}
+            tags: true 
