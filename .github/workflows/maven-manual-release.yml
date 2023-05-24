@@ -60,6 +60,6 @@ jobs:
           uses: ad-m/github-push-action@master
           with:
             # See https://github.com/orgs/community/discussions/25702 and https://github.com/orgs/community/discussions/26220
-            github_token: ${{ secrets.PAT_TOKEN }}
+            github_token: ${{ secrets.PAT }}
             branch: ${{ github.ref }}
             tags: true 
