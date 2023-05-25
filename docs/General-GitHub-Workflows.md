@@ -1,4 +1,4 @@
-## gitbub-release.yml
+## github-release.yml
 Create a new GitHub Release (Aggregate logs from "Maven Dependency Updates" action)
 
 ```yml
