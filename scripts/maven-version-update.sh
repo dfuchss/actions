@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # This script will update the version of the project and commit the changes
 # License: MIT
 # Author: Dominik Fuchß (dfuchss)
