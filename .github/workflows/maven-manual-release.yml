@@ -46,8 +46,16 @@ jobs:
         - name: Bump to Release, Verify, Bump to Next Version, and Verify
           shell: bash
           run: |
+            # Check that workflow has only one "uses" in its file
+            if [ $(grep -c "uses:" ${{github.event.workflow}}) -ne 1 ]; then
+              echo "Workflow has more than one 'uses' in its file. Skipping ..."
+              exit 1
+            fi
+            WORKFLOW_REPO=$(cat ${{github.event.workflow}} | grep "uses:" | awk '{print $2}' | cut -d '/' -f 1,2)
+            echo "Workflow repo is $WORKFLOW_REPO"
+
             # Download version update script to tmp directory
-            curl -s https://raw.githubusercontent.com/dfuchss/actions/main/scripts/maven-version-update.sh > /tmp/maven-version-update.sh
+            curl -s https://raw.githubusercontent.com/$WORKFLOW_REPO/main/scripts/maven-version-update.sh > /tmp/maven-version-update.sh
             chmod +x /tmp/maven-version-update.sh
             echo "######### Content of maven-version-update.sh #########"
             cat /tmp/maven-version-update.sh
