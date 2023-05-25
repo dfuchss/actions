@@ -28,6 +28,12 @@ jobs:
       
       - name: Copy Wiki from Docs folder
         run: cp -r ./docs/. ./wiki
+
+      - name: Set Repository in Docs
+        shell: bash
+        run: |
+          cd wiki
+          find . | grep .md | xargs sed -i "s|<<REPO>>|${{ github.repository }}|g"
           
       - name: Deploy 🚀
         uses: stefanzweifel/git-auto-commit-action@v4

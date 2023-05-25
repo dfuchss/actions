@@ -19,7 +19,7 @@ on:
 
 jobs:
   verify:
-    uses: dfuchss/actions/.github/workflows/maven.yml@main
+    uses: <<REPO>>/.github/workflows/maven.yml@main
     with:
       deploy: false
       with-submodules: true
@@ -47,7 +47,7 @@ on:
 
 jobs:
   publish:
-    uses: dfuchss/actions/.github/workflows/maven.yml@main
+    uses: <<REPO>>/.github/workflows/maven.yml@main
     with:
       deploy: true
     secrets:
@@ -73,7 +73,7 @@ on:
 jobs:
   sonarcloud:
     if: ${{ github.actor != 'dependabot[bot]' }} 
-    uses: dfuchss/actions/.github/workflows/sonarcloud.yml@main
+    uses: <<REPO>>/.github/workflows/sonarcloud.yml@main
     with:
       with-submodules: true
     secrets:
@@ -97,7 +97,7 @@ on:
 
 jobs:
   update:
-    uses: dfuchss/actions/.github/workflows/maven-update.yml@main
+    uses: <<REPO>>/.github/workflows/maven-update.yml@main
     secrets:
       # Needs to be a personal access token to push as a certain user; otherwise actions won't be triggered.
       PAT: ${{ secrets.PAT }}
@@ -117,7 +117,7 @@ on:
 
 jobs:
   update:
-    uses: dfuchss/actions/.github/workflows/maven-release.yml@main
+    uses: <<REPO>>/.github/workflows/maven-release.yml@main
     secrets:
       # Needs to be a personal access token to push as a certain user; otherwise actions won't be triggered.
       PAT: ${{ secrets.PAT }}
@@ -145,7 +145,7 @@ on:
         required: true
 jobs:
   release:
-    uses: dfuchss/actions/.github/workflows/maven-manual-release.yml@main
+    uses: <<REPO>>/.github/workflows/maven-manual-release.yml@main
     secrets:
       # Needs to be a personal access token to push as a certain user; otherwise actions won't be triggered.
       PAT: ${{ secrets.PAT }}

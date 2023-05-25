@@ -14,7 +14,7 @@ on:
 
 jobs:
   publish:
-    uses: dfuchss/actions/.github/workflows/docker.yml@main
+    uses: <<REPO>>/.github/workflows/docker.yml@main
     with:
       image-name: "myimage"
       push: true

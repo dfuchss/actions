@@ -12,6 +12,6 @@ on:
 
 jobs:
   release:
-    uses: dfuchss/actions/.github/workflows/github-release.yml@main
+    uses: <<REPO>>/.github/workflows/github-release.yml@main
     
 ```
