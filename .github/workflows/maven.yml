@@ -43,11 +43,21 @@ jobs:
       with:
         submodules: ${{ inputs.with-submodules }}
 
-    - uses: actions/setup-java@v3
+    - name: Java with Cache
+      uses: actions/setup-java@v3
+      if: ${{ !inputs.deploy }}
       with:
         java-version: 17
         distribution: 'temurin'
         cache: 'maven'
+
+
+    - name: Java without Cache
+      uses: actions/setup-java@v3
+      if: ${{ inputs.deploy }}
+      with:
+        java-version: 17
+        distribution: 'temurin'
 
     - name: Maven Verify
       shell: bash
