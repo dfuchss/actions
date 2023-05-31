@@ -78,4 +78,4 @@ jobs:
     - name: Publish Package
       if: ${{ inputs.deploy }}
       shell: bash
-      run: mvn -Dmaven.test.skip=true -P deployment -U -B deploy
+      run: mvn -DskipTests -P deployment -U -B deploy
