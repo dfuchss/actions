@@ -46,6 +46,7 @@ jobs:
       shell: bash
       run: |
         mvn -U -B versions:update-parent versions:update-properties versions:update-parent versions:update-child-modules versions:use-latest-releases -DgenerateBackupPoms=false | tee /tmp/updates-raw.txt
+        mvn -U -B verify
         echo 'Auto-Update Dependencies' > /tmp/updates.txt
         cat /tmp/updates-raw.txt | grep 'Updated' | cut -d ' ' -f 2- >> /tmp/updates.txt || true
         echo 'Setting commit message to ..'
