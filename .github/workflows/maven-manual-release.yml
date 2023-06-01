@@ -15,7 +15,12 @@ on:
         next-version:
             type: string
             description: The version after release. E.g., "2.0.0"
-            required: true  
+            required: true
+        runs-on:
+          description: "Tag for the runner to use in the main job."
+          type: string
+          required: false
+          default: "ubuntu-latest"              
     secrets:
       PAT:
         required: true
@@ -23,7 +28,7 @@ on:
 jobs:
     build:
         name: "Trigger new Release"
-        runs-on: ubuntu-latest
+        runs-on: ${{ inputs.runs-on }}
     
         steps:
         - uses: actions/checkout@v3.5.2

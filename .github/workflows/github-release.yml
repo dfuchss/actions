@@ -8,6 +8,12 @@ on:
           type: boolean
           required: false
           default: false
+        runs-on:
+          description: "Tag for the runner to use in the main job."
+          type: string
+          required: false
+          default: "ubuntu-latest"
+
 
 jobs:
   pre_job:
@@ -26,7 +32,7 @@ jobs:
     needs: pre_job
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     name: "Create new GitHub Release"
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs-on }}
     permissions:
       contents: write
     steps:

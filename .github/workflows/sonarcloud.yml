@@ -8,6 +8,11 @@ on:
           type: boolean
           required: false
           default: false
+        runs-on:
+          description: "Tag for the runner to use in the main job."
+          type: string
+          required: false
+          default: "ubuntu-latest"
     secrets:
       SONAR_TOKEN:
         required: true
@@ -28,7 +33,7 @@ jobs:
   build:
     needs: pre_job
     name: "SonarCloud Scan"
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs-on }}
     if: ${{ needs.pre_job.outputs.should_skip != 'true' && github.actor != 'dependabot[bot]' }}
     
     steps:

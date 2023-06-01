@@ -8,6 +8,12 @@ on:
           type: boolean
           required: false
           default: false
+        runs-on:
+          description: "Tag for the runner to use in the main job."
+          type: string
+          required: false
+          default: "ubuntu-latest"
+
     secrets:
       PAT:
         required: true
@@ -29,7 +35,7 @@ jobs:
     needs: pre_job
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     name: "Create new Release"
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs-on }}
     steps:
     - uses: actions/checkout@v3
       with:

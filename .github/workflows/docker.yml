@@ -17,6 +17,11 @@ on:
           type: boolean
           required: false
           default: false
+        runs-on:
+          description: "Tag for the runner to use in the main job."
+          type: string
+          required: false
+          default: "ubuntu-latest"          
           
 jobs:
   pre_job:
@@ -34,7 +39,7 @@ jobs:
   build:
     needs: pre_job
     name: "Docker Build and/or Deploy"
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs-on }}
     if: ${{ needs.pre_job.outputs.should_skip != 'true' && github.actor != 'dependabot[bot]' }}
     
     permissions:

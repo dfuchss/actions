@@ -12,6 +12,12 @@ on:
           description: "Switch to enable or disable the deployment process"
           type: boolean
           required: true
+        runs-on:
+          description: "Tag for the runner to use in the main job."
+          type: string
+          required: false
+          default: "ubuntu-latest"
+
     secrets:
       OSSRH_USER:
         required: true
@@ -37,7 +43,7 @@ jobs:
     needs: pre_job
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     name: "Build and/or Deploy"
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs-on }}
     steps:
     - uses: actions/checkout@v3
       with:
