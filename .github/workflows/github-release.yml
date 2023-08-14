@@ -49,7 +49,7 @@ jobs:
           DIFF=$(git log --oneline)
         fi
         echo "# Commits since last release" > CHANGELOG.txt
-        echo "$DIFF" | sed 's/^/* /' | sed '/Auto-Update Dependencies/{s/Updated/\n\t* Updated/g}' | sed '/\[maven-release-plugin\]/d' | sed '/Merge branch/d' | sed -r '/.*\(#\w+\)$/d' >> CHANGELOG.txt
+        echo "$DIFF" | sed 's/^/* /' | sed '/Auto-Update Dependencies/{s/Updated/\n\t* Updated/g}' | sed '/\[maven-release-plugin\]/d' | sed '/Merge branch/d' | sed '/Prepare for next development cycle/d' | sed -r '/.*\(#\w+\)$/d' >> CHANGELOG.txt
         
     - uses: softprops/action-gh-release@v1
       with:
