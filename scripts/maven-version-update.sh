@@ -40,7 +40,7 @@ fi
 
 # Verify that all tests pass
 mvn -B verify
-git commit -a -m "Release $RELEASE_VERSION"
+git commit --allow-empty -a -m "Release $RELEASE_VERSION"
 git tag -a -m "Release $RELEASE_VERSION" "v$RELEASE_VERSION"
 
 # Prepare for next development cycle
@@ -60,4 +60,4 @@ else
 fi
 
 mvn -B verify
-git commit -a -m "Prepare for next development cycle"
+git commit --allow-empty -a -m "Prepare for next development cycle"
