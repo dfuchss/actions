@@ -37,7 +37,7 @@ jobs:
     if: ${{ needs.pre_job.outputs.should_skip != 'true' && github.actor != 'dependabot[bot]' }}
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: ${{ inputs.with-submodules }}
         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
