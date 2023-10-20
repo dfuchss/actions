@@ -85,6 +85,8 @@ Update Dependencies and Update Versions
 
 :warning: It is important that the project either uses the revision property or has a single version property. Otherwise, the version will not be updated correctly.
 
+You can configure the optional property `create-tag` if you want to disable the creation of a tag. 
+
 ```yml
 name: Maven Dependency Updates
 
