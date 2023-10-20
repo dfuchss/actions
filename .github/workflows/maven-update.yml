@@ -8,6 +8,11 @@ on:
           type: boolean
           required: false
           default: false
+        create-tag:
+          description: "Indicator if a tag should be created"
+          type: boolean
+          required: false
+          default: true
         runs-on:
           description: "Tag for the runner to use in the main job."
           type: string
@@ -73,7 +78,7 @@ jobs:
     - name: New Release if there were Updates
       # This step will only for for single module projects or projects that use the revision property
       shell: bash
-      if: steps.changes.outputs.changed != 0
+      if: steps.changes.outputs.changed != 0 && ${{ inputs.create-tag }}
       run: |
         # Check that workflow has only one "uses" in its file
         if [ $(grep -c "uses:" ${{github.event.workflow}}) -ne 1 ]; then
@@ -100,4 +105,4 @@ jobs:
         # See https://github.com/orgs/community/discussions/25702 and https://github.com/orgs/community/discussions/26220
         github_token: ${{ secrets.PAT }}
         branch: ${{ github.ref }}
-        tags: true
+        tags: ${{ inputs.create-tag }}
