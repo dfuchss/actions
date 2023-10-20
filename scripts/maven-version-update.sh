@@ -10,14 +10,33 @@ MAJOR=$(echo $VERSION | cut -d '.' -f1)
 MINOR=$(echo $VERSION | cut -d '.' -f2)
 PATCH=$(echo $VERSION | cut -d '.' -f3)
 
+# Verify AUTO_DIGIT environment variable selection: Possible Options: Major, Minor, Patch. Default: Minor
+if [[ $AUTO_DIGIT == "" ]]; then
+    AUTO_DIGIT="Minor"
+fi
+if [[ $AUTO_DIGIT != "Major" && $AUTO_DIGIT != "Minor" && $AUTO_DIGIT != "Patch" ]]; then
+    echo "Invalid AUTO_DIGIT value: $AUTO_DIGIT .. aborting. Allowed values: Major, Minor, or Patch"
+    exit 1
+fi
+
+
 if [[ $RELEASE_VERSION == "" ]]; then
     echo "No release version specified .. defaulting to $MAJOR.$MINOR.$PATCH"
     RELEASE_VERSION="$MAJOR.$MINOR.$PATCH"
 fi
 
 if [[ $NEXT_VERSION == "" ]]; then
-    echo "No next version specified .. defaulting to $MAJOR.$((MINOR+1)).0-SNAPSHOT"
-    NEXT_VERSION="$MAJOR.$((MINOR+1)).0-SNAPSHOT"
+    if [[ $AUTO_DIGIT == "Major" ]]; then
+        NEXT_VERSION="$((MAJOR+1)).0.0-SNAPSHOT"
+    elif [[ $AUTO_DIGIT == "Minor" ]]; then
+        NEXT_VERSION="$MAJOR.$((MINOR+1)).0-SNAPSHOT"
+    elif [[ $AUTO_DIGIT == "Patch" ]]; then
+        NEXT_VERSION="$MAJOR.$MINOR.$((PATCH+1))-SNAPSHOT"
+    else 
+        echo "Invalid AUTO_DIGIT value: $AUTO_DIGIT .. aborting. Allowed values: Major, Minor, or Patch"
+        exit 1
+    fi
+    echo "No next version specified .. defaulting to $NEXT_VERSION"
 fi
 
 echo "Current version: $CURRENT_VERSION"
