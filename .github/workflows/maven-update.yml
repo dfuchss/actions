@@ -83,7 +83,7 @@ jobs:
     - name: New Release if there were Updates
       # This step will only for for single module projects or projects that use the revision property
       shell: bash
-      if: steps.changes.outputs.changed != 0 && ${{ inputs.create-tag }}
+      if: ${{ steps.changes.outputs.changed != 0 && inputs.create-tag == 'true' }}
       run: |
         # Check that workflow has only one "uses" in its file
         if [ $(grep -c "uses:" ${{github.event.workflow}}) -ne 1 ]; then
