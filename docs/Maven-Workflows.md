@@ -86,7 +86,7 @@ Update Dependencies and Update Versions
 :warning: It is important that the project either uses the revision property or has a single version property. Otherwise, the version will not be updated correctly.
 
 * You can configure the optional property `create-tag` if you want to disable the creation of a tag. 
-* You can configure the optional property `auto-digit` if you want to change the default digit that shall be incremented on release. Default is Minor (2.1.0 -> 2.2.0). Possible values are `major`, `minor` and `patch`.
+* You can configure the optional property `auto-digit` if you want to change the default digit that shall be incremented on release. Default is Minor (2.1.0 -> 2.2.0). Possible values are `Major`, `Minor` and `Patch`.
 
 ```yml
 name: Maven Dependency Updates
@@ -111,7 +111,7 @@ Create new Maven Release (only commits tags & branch and updates versions)
 
 :warning: It is important that the project either uses the revision property or has a single version property. Otherwise, the version will not be updated correctly.
 
-* You can configure the optional property `auto-digit` if you want to change the default digit that shall be incremented on release. Default is Minor (2.1.0 -> 2.2.0). Possible values are `major`, `minor` and `patch`.
+* You can configure the optional property `auto-digit` if you want to change the default digit that shall be incremented on release. Default is Minor (2.1.0 -> 2.2.0). Possible values are `Major`, `Minor` and `Patch`.
 
 ```yml
 name: Maven Release
@@ -133,7 +133,7 @@ Create a manual release based on user input.
 
 :warning: It is important that the project either uses the revision property or has a single version property. Otherwise, the version will not be updated correctly.
 
-* You can configure the optional property `auto-digit` if you want to change the default digit that shall be incremented on release. Default is Minor (2.1.0 -> 2.2.0). Possible values are `major`, `minor` and `patch`.
+* You can configure the optional property `auto-digit` if you want to change the default digit that shall be incremented on release. Default is Minor (2.1.0 -> 2.2.0). Possible values are `Major`, `Minor` and `Patch`.
 
 ```yml
 name: Maven Release (Manual)
