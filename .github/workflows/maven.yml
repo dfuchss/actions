@@ -53,7 +53,7 @@ jobs:
       uses: actions/setup-java@v3
       if: ${{ !inputs.deploy }}
       with:
-        java-version: 17
+        java-version: 21
         distribution: 'temurin'
         cache: 'maven'
 
@@ -62,7 +62,7 @@ jobs:
       uses: actions/setup-java@v3
       if: ${{ inputs.deploy }}
       with:
-        java-version: 17
+        java-version: 21
         distribution: 'temurin'
 
     - name: Maven Verify
