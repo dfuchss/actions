@@ -25,7 +25,7 @@ on:
           description: "The digit to be automatically incremented. E.g., Major, Minor, or Patch"
           type: string
           required: false
-          default: "Minor"              
+          default: "Patch"              
     secrets:
       PAT:
         required: true

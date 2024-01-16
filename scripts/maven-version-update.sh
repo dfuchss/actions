@@ -10,9 +10,9 @@ MAJOR=$(echo $VERSION | cut -d '.' -f1)
 MINOR=$(echo $VERSION | cut -d '.' -f2)
 PATCH=$(echo $VERSION | cut -d '.' -f3)
 
-# Verify AUTO_DIGIT environment variable selection: Possible Options: Major, Minor, Patch. Default: Minor
+# Verify AUTO_DIGIT environment variable selection: Possible Options: Major, Minor, Patch. Default: Patch
 if [[ $AUTO_DIGIT == "" ]]; then
-    AUTO_DIGIT="Minor"
+    AUTO_DIGIT="Patch"
 fi
 if [[ $AUTO_DIGIT != "Major" && $AUTO_DIGIT != "Minor" && $AUTO_DIGIT != "Patch" ]]; then
     echo "Invalid AUTO_DIGIT value: $AUTO_DIGIT .. aborting. Allowed values: Major, Minor, or Patch"
