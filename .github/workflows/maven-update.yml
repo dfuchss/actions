@@ -52,9 +52,12 @@ jobs:
         submodules: ${{ inputs.with-submodules }}
         persist-credentials: false
 
+    - uses: joshlong/java-version-export-github-action@v28
+      id: jve
+
     - uses: actions/setup-java@v4
       with:
-        java-version: 21
+        java-version: ${{ steps.jve.outputs.java_major_version }}
         distribution: 'temurin'
         cache: 'maven'
 
