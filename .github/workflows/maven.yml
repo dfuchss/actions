@@ -26,22 +26,8 @@ on:
       GPG_KEY:
         required: true
           
-jobs:
-  pre_job:
-    name: "Check for duplicate jobs"
-    runs-on: ubuntu-latest
-    outputs:
-      should_skip: ${{ steps.skip_check.outputs.should_skip }}
-    steps:
-      - id: skip_check
-        uses: fkirc/skip-duplicate-actions@master
-        with:
-          concurrent_skipping: 'same_content_newer'
-          skip_after_successful_duplicate: 'true'
-          
+jobs:     
   build:
-    needs: pre_job
-    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     name: "Build and/or Deploy"
     runs-on: ${{ inputs.runs-on }}
     steps:
