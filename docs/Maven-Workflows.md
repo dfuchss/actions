@@ -24,12 +24,12 @@ jobs:
       deploy: false
       with-submodules: true
     secrets:
-      OSSRH_USER: ${{secrets.OSSRH_USER}}
-      OSSRH_TOKEN: ${{secrets.OSSRH_TOKEN}}
+      CENTRAL_USER: ${{secrets.CENTRAL_USER}}
+      CENTRAL_TOKEN: ${{secrets.CENTRAL_TOKEN}}
       GPG_KEY: ${{secrets.GPG_KEY}}
 ```
 
-### Verify and Deploy to OSSRH
+### Verify and Deploy to CENTRAL
 ```yml
 name: Maven Deploy
 
@@ -51,8 +51,8 @@ jobs:
     with:
       deploy: true
     secrets:
-      OSSRH_USER: ${{secrets.OSSRH_USER}}
-      OSSRH_TOKEN: ${{secrets.OSSRH_TOKEN}}
+      CENTRAL_USER: ${{secrets.CENTRAL_USER}}
+      CENTRAL_TOKEN: ${{secrets.CENTRAL_TOKEN}}
       GPG_KEY: ${{secrets.GPG_KEY}}
 ```
 

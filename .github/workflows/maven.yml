@@ -19,9 +19,9 @@ on:
           default: "ubuntu-latest"
 
     secrets:
-      OSSRH_USER:
+      CENTRAL_USER:
         required: true
-      OSSRH_TOKEN:
+      CENTRAL_TOKEN:
         required: true
       GPG_KEY:
         required: true
@@ -62,7 +62,7 @@ jobs:
       uses: whelk-io/maven-settings-xml-action@v22
       if: ${{ inputs.deploy }}
       with:
-        servers: '[{ "id": "ossrh", "username": "${{ secrets.OSSRH_USER }}", "password": "${{ secrets.OSSRH_TOKEN }}" }]'
+        servers: '[{ "id": "central", "username": "${{ secrets.CENTRAL_USER }}", "password": "${{ secrets.CENTRAL_TOKEN }}" }]'
 
     - name: Import GPG key
       uses: crazy-max/ghaction-import-gpg@v6
