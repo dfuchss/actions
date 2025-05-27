@@ -31,6 +31,7 @@ jobs:
       with:
         submodules: ${{ inputs.with-submodules }}
         persist-credentials: false
+        fetch-depth: 0
 
     - uses: joshlong/java-version-export-github-action@v28
       id: jve   
