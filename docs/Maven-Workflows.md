@@ -56,30 +56,6 @@ jobs:
       GPG_KEY: ${{secrets.GPG_KEY}}
 ```
 
-## sonarcloud.yml
-Verify a maven project via sonarcloud
-
-```yml
-name: Sonar Cloud
-
-on:
-  push:
-  pull_request:
-    types: [opened, synchronize, reopened]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-jobs:
-  sonarcloud:
-    if: ${{ github.actor != 'dependabot[bot]' }} 
-    uses: <<REPO>>/.github/workflows/sonarcloud.yml@main
-    with:
-      with-submodules: true
-    secrets:
-      SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
-```
-
 ## maven-update.yml
 Update Dependencies and Update Versions
 
