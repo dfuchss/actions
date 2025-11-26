@@ -33,7 +33,7 @@ jobs:
     name: "Check for Updates"
     runs-on: ${{ inputs.runs-on }}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         submodules: ${{ inputs.with-submodules }}
         persist-credentials: false

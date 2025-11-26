@@ -31,7 +31,7 @@ jobs:
     name: "Build and/or Deploy"
     runs-on: ${{ inputs.runs-on }}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         submodules: ${{ inputs.with-submodules }}
         fetch-depth: 0
