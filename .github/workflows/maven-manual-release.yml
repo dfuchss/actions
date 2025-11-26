@@ -36,7 +36,7 @@ jobs:
         runs-on: ${{ inputs.runs-on }}
     
         steps:
-        - uses: actions/checkout@v5
+        - uses: actions/checkout@v6
           with:
             persist-credentials: false
             submodules: ${{ inputs.with-submodules }}
