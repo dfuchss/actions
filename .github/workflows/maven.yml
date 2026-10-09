@@ -83,6 +83,15 @@ jobs:
       with:
         gpg_private_key: ${{ secrets.GPG_KEY }}
 
+    - name: Set up Maven 3.9
+      # central-publishing-maven-plugin 0.11.0 stages invalid bundles (maven-metadata-local.xml) with Maven 3.10
+      if: ${{ inputs.deploy }}
+      shell: bash
+      run: |
+        v=3.9.16
+        curl -sSfL "https://repo1.maven.org/maven2/org/apache/maven/apache-maven/$v/apache-maven-$v-bin.tar.gz" | tar xz -C "$RUNNER_TEMP"
+        echo "$RUNNER_TEMP/apache-maven-$v/bin" >> "$GITHUB_PATH"
+
     - name: Publish Package
       if: ${{ inputs.deploy }}
       shell: bash
