@@ -41,7 +41,7 @@ jobs:
       shell: bash
       run: |
         for expr in maven.compiler.target maven.compiler.release java.version; do
-          v=$(mvn -B -q help:evaluate -DforceStdout -Dexpression="$expr" 2>/dev/null || true)
+          v=$(mvn -B -q -N help:evaluate -DforceStdout -Dexpression="$expr" 2>/dev/null || true)
           v=${v#1.}
           if [[ "$v" =~ ^[0-9]+ ]]; then
             echo "java_major_version=${BASH_REMATCH[0]}" >> "$GITHUB_OUTPUT"
