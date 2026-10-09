@@ -71,6 +71,12 @@ jobs:
       shell: bash
       run: mvn -U -B verify
 
+    - name: Maven Package (Deployment Profile)
+      # Catches plugin updates that only break the deployment profile
+      if: ${{ !inputs.deploy }}
+      shell: bash
+      run: mvn -P deployment -DskipTests -Dgpg.skip -B package
+
     - name: Set maven settings.xml
       uses: whelk-io/maven-settings-xml-action@v22
       if: ${{ inputs.deploy }}
