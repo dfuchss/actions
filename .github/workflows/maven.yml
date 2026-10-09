@@ -86,4 +86,4 @@ jobs:
     - name: Publish Package
       if: ${{ inputs.deploy }}
       shell: bash
-      run: mvn -DskipTests -P deployment -U -B deploy
+      run: mvn -DskipTests -P deployment -Dmaven.repository.credentialScope=id -U -B deploy
