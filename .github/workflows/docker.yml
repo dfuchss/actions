@@ -17,6 +17,11 @@ on:
           type: boolean
           required: false
           default: false
+        build-args:
+          description: "Build arguments for docker build, one KEY=VALUE per line"
+          type: string
+          required: false
+          default: ""
         runs-on:
           description: "Tag for the runner to use in the main job."
           type: string
@@ -37,7 +42,14 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Build image
-        run: docker build . --file Dockerfile --tag ${{ inputs.image-name }}
+        env:
+          BUILD_ARGS: ${{ inputs.build-args }}
+        run: |
+          args=()
+          while IFS= read -r line; do
+            if [ -n "$line" ]; then args+=(--build-arg "$line"); fi
+          done <<< "$BUILD_ARGS"
+          docker build . --file Dockerfile --tag ${{ inputs.image-name }} "${args[@]}"
 
       - name: Log into Registry
         if: ${{ inputs.push }}
