@@ -60,6 +60,12 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
 
+    # Maven 3.10 breaks snapshot deployment to Central (HTTP 401)
+    - name: Set up Maven
+      uses: stCarolas/setup-maven@v5
+      with:
+        maven-version: 3.9.16
+
     - name: Update Dependencies
       shell: bash
       run: |
